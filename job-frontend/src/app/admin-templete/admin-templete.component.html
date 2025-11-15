@@ -1,0 +1,53 @@
+<div  class="container">
+  <mat-toolbar color="primary">
+    <button mat-icon-button (click)="drawer.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span class="spacer"></span>
+    <button mat-button>Home</button>
+    <button mat-button  [matMenuTriggerFor]="offerActions">
+      <mat-icon  iconPositionEnd>arrow_drop_down</mat-icon>
+      Job Offers</button>
+    <mat-menu  #offerActions>
+      <button  mat-menu-item>Check-list</button>
+      <button  mat-menu-item routerLink="/admin/new-offer">Cerate new  Offer </button>
+    </mat-menu>
+    <button  mat-button *ngIf="this.auth.isAuthenticated==true" [matMenuTriggerFor]="desconnect">
+      <mat-icon  iconPositionEnd>arrow_drop_down</mat-icon>
+      {{this.auth.username}}</button>
+    <button  *ngIf="this.auth.isAuthenticated!=true" mat-raised-button  color="accent" routerLink="/login">
+      Login
+    </button>
+    <mat-menu #desconnect>
+      <button mat-menu-item routerLink="/admin/logout"><mat-icon>input</mat-icon>logout</button>
+    </mat-menu>
+  </mat-toolbar>
+  <mat-drawer-container>
+
+    <mat-drawer #drawer mode="side" position="start" opened="true">
+      <mat-nav-list>
+        <mat-icon>home</mat-icon>
+        <button mat-button routerLink="/admin/home">Home</button>
+      </mat-nav-list>
+      <mat-nav-list>
+        <mat-icon>dashboard</mat-icon>
+        <button mat-button routerLink="/admin/dashboard">DashBoard</button>
+      </mat-nav-list>
+      <mat-nav-list>
+        <mat-icon>list</mat-icon>
+        <button mat-button routerLink="/admin/offers">Offers</button>
+      </mat-nav-list>
+      <mat-nav-list>
+        <mat-icon>list</mat-icon>
+        <button mat-button routerLink="/admin/news">Important  News</button>
+      </mat-nav-list>
+    </mat-drawer>
+
+    <mat-drawer-content>
+      <div  style="min-height: 600px">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-drawer-content>
+  </mat-drawer-container>
+
+</div>
