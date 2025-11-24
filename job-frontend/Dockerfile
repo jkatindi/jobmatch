@@ -30,14 +30,15 @@ COPY --from=builder /app/dist/job-offer-material /usr/share/nginx/html
 
 # Copy Nginx configuration
 EXPOSE 80
-COPY nginx.conf.template /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 #RUN  mkdir  -p  /etc/nginx/templates
 #COPY  nginx.conf.template  /etc/nginx/templates/
 #RUN chmod +x /etc/nginx/templates/nginx.conf.template
-COPY  entrypoint.sh  /docker-entrypoint.d/
-RUN chmod +x /docker-entrypoint.d/entrypoint.sh
-ENTRYPOINT ["sh","/docker-entrypoint.d/entrypoint.sh"]
-CMD ["nginx", "-g", "daemon off;"]
+
+#COPY  entrypoint.sh  /docker-entrypoint.d/
+#RUN chmod +x /docker-entrypoint.d/entrypoint.sh
+#ENTRYPOINT ["sh","/docker-entrypoint.d/entrypoint.sh"]
+#CMD ["nginx", "-g", "daemon off;"]
 
 
 

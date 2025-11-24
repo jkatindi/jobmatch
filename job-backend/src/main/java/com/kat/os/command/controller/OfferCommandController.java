@@ -18,7 +18,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
-@RequestMapping("/command/offers")
+@RequestMapping("/api")
 public class OfferCommandController {
     private final OfferCommandService commandService;
 
@@ -26,7 +26,7 @@ public class OfferCommandController {
         this.commandService = commandService;
     }
 
-    @PostMapping("/addOffer")
+    @PostMapping("/command/offers/addOffer")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<CompletableFuture<String>> addOffer(@RequestBody CreateOfferJobTDO offerJobTDO){
         return  ResponseEntity
@@ -38,7 +38,7 @@ public class OfferCommandController {
     }
     
 
-    @PutMapping("/updateOffer")
+    @PutMapping("/command/offers/updateOffer")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public CompletableFuture<String>  updateOffer(@RequestBody UpdateOfferTDO offerTDO)
     {

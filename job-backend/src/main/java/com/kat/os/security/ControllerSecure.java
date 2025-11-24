@@ -15,17 +15,17 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api")
 public class ControllerSecure {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
     private JwtEncoder jwtEncoder;
-    @GetMapping("/profile")
+    @GetMapping("/auth/profile")
     public Authentication  authentication(Authentication authentication){
         return  authentication;
     }
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public Map<String,String> login(String username,String password){
         Authentication authentication=authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username,password)

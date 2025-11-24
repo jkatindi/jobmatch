@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/query")
+@RequestMapping("/api")
 public class OfferControllerQuery {
 
     private final QueryGateway gateway;
@@ -34,20 +34,20 @@ public class OfferControllerQuery {
         this.gateway = gateway;
     }
 
-    @GetMapping("/offers/all")
+    @GetMapping("/query/offers/all")
     @PreAuthorize("hasAuthority('SCOPE_USER')")
     public List<WorkOfferTDO> getAllOfferWork(){
         return  this.gateway.query(new GetAllQueryOfferDTO(),
                 ResponseTypes.multipleInstancesOf(WorkOfferTDO.class)).join();
     }
 
-    @PostMapping("/addOffer")
+    @PostMapping("/query/addOffer")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public WorkOffer addNewOffer(@RequestBody WorkOfferTDO workOfferTDO){
         workOfferTDO.setId(UUID.randomUUID().toString());
         return  this.offerRepository.save(this.mapper.toEntity(workOfferTDO));
     }
-    @GetMapping("/all/offers/{keyWord}")
+    @GetMapping("/query/all/offers/{keyWord}")
     @PreAuthorize("hasAuthority('SCOPE_USER')")
     public  List<WorkOfferTDO> getOfferByKeyWord(@PathVariable  String keyWord) {
 
@@ -55,35 +55,35 @@ public class OfferControllerQuery {
                 ResponseTypes.multipleInstancesOf(WorkOfferTDO.class)).join();
     }
 
-    @GetMapping("/offers/all/{id}")
+    @GetMapping("/query/offers/all/{id}")
     @PreAuthorize("hasAuthority('SCOPE_USER')")
     public WorkOfferTDO getOneOfferID(@PathVariable String id){
         return this.gateway.query(
                 new GetQueryIdOfferDTO(id),ResponseTypes.instanceOf(WorkOfferTDO.class)).join();
     }
 
-    @GetMapping("/technologies/all")
+    @GetMapping("/query/technologies/all")
     @PreAuthorize("hasAuthority('SCOPE_USER')")
     public List<TechnologyDTO> getAllTechSkills(){
         return this.gateway.query(new GetAllQueryTechDTO(),
                         ResponseTypes.multipleInstancesOf(TechnologyDTO.class)).join();
     }
 
-    @GetMapping("/technologies/{id}")
+    @GetMapping("/query/technologies/{id}")
     @PreAuthorize("hasAuthority('SCOPE_USER')")
     public TechnologyDTO getOneTechnology(@PathVariable Long id){
         return  this.gateway.query(new GetQueryIdTechDTO(id),
                 ResponseTypes.instanceOf(TechnologyDTO.class)).join();
     }
 
-    @GetMapping("/degrees/all")
+    @GetMapping("/query/degrees/all")
     @PreAuthorize("hasAuthority('SCOPE_USER')")
     public List<DegreeDTO> getAllDegrees(){
         return  this.gateway.query(new GetAllQueryDegreeDTO(),
                 ResponseTypes.multipleInstancesOf(DegreeDTO.class)).join();
     }
 
-    @GetMapping("/degrees/{id}")
+    @GetMapping("/query/degrees/{id}")
     @PreAuthorize("hasAuthority('SCOPE_USER')")
     public DegreeDTO getOneDegree(@PathVariable Long id){
         return  this.gateway.query(new GetQueryIdDegreeDTO(id),

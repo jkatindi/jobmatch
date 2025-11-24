@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.katindi</groupId>
-	<artifactId>offer-service</artifactId>
+	<artifactId>job-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>offer-service</name>
+	<name>job-backend</name>
 	<description>this module manages all types of available offers, example internship, job offer</description>
 	<properties>
 		<java.version>17</java.version>
@@ -106,12 +106,6 @@
 			<scope>provided</scope>
 		</dependency>-->
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
