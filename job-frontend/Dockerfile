@@ -26,19 +26,14 @@ FROM nginx:alpine
 RUN apk add --no-cache gettext
 # Copy the built application from the build stage
 COPY --from=builder /app/dist/job-offer-material /usr/share/nginx/html
-#COPY   ./src/assets/env.template.js  /usr/share/nginx/html/assets/env.template.js
 
-# Copy Nginx configuration
+# Provide Nginx configuration template and entrypoint script for envsubst
+RUN  mkdir -p /etc/nginx/templates
+COPY nginx.conf.template /etc/nginx/templates/nginx.conf.template
+COPY entrypoint.sh /docker-entrypoint.d/10-render-config.sh
+RUN chmod +x /docker-entrypoint.d/10-render-config.sh
+
 EXPOSE 80
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-#RUN  mkdir  -p  /etc/nginx/templates
-#COPY  nginx.conf.template  /etc/nginx/templates/
-#RUN chmod +x /etc/nginx/templates/nginx.conf.template
-
-#COPY  entrypoint.sh  /docker-entrypoint.d/
-#RUN chmod +x /docker-entrypoint.d/entrypoint.sh
-#ENTRYPOINT ["sh","/docker-entrypoint.d/entrypoint.sh"]
-#CMD ["nginx", "-g", "daemon off;"]
 
 
 

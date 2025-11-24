@@ -25,13 +25,16 @@ services:
       - db_offer
     networks:
       - app-network
-  job-fronted:
+  job-frontend:
     build:
       context: ./job-frontend
       dockerfile: Dockerfile
     restart: always
     ports:
       - "4200:80"
+    environment:
+      # Resolve the backend via Docker DNS by default; override with 192.168.0.45 when deploying to VirtualBox host
+      REMOTE_HOST: job-backend
     depends_on:
       - job-backend
     networks:
