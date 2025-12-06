@@ -10,7 +10,7 @@ import { ComputeService } from './compute.service';
   providedIn: 'root'
 })
 export class OfferService {
-  remote_host: string=environment.BACKEND_HOST;
+  remote_host: any=environment.BACKEND_HOST+"/api";
   jobOffers!:JobOffer;
   
 

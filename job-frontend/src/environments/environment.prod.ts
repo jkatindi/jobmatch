@@ -7,7 +7,7 @@ declare global {
 
 export const environment = {
   production: true,
-  //BACKEND_HOST: window['env']['backendUrl'] || 'http://localhost:8084'
-  BACKEND_HOST:  '/api'
- 
+ //BACKEND_HOST: window['env']['REMOTE_HOST'] || 'http://localhost:8084'
+  BACKEND_HOST: ''
+
 };

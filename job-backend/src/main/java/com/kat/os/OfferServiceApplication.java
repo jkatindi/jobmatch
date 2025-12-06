@@ -43,9 +43,9 @@ public class OfferServiceApplication  implements CommandLineRunner {
 						"Microservises","Docker Swarm",
 						"Apache Kafka","Kafka stream","Docker","Kubernates","Design Patterns","Principe SOLID",
 						"MySql","Jpa Hibernate","Spring MVC","Spring Boot","Python Math","Jsp","Javascript","C#","React",
-						"express", "GraphQL","Docker Swarm","Spring Batch").
+						"express", "GraphQL","Docker Swarm","Spring Batch","AI-generative").
 				forEach(tech->this.techSkillService.addOneTechnology(tech));
-		Arrays.asList("Bachelor","Master","Certification","Data scientist").
+		Arrays.asList("Bachelor","Master","Certification","Data scientist","Master-AI","Certification CCNA").
 				forEach(deg->this.degreeService.addOneDegree(deg));
 
 	}

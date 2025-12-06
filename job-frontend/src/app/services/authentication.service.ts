@@ -12,7 +12,7 @@ export class AuthenticationService {
   isAuthenticated: boolean=false;
   roles!: any[];
   username: any;
-  server:any=environment.BACKEND_HOST;
+  server:string=environment.BACKEND_HOST+"/api";
   constructor(private  http: HttpClient,private computeService:ComputeService) { }
 
   ngOnInit():void{
@@ -26,7 +26,7 @@ export class AuthenticationService {
     let params=new HttpParams()
       .set("username",username)
       .set("password",password)
-    return this.http.post(`${this.server}/auth/login`,params,options)
+    return this.http.post(this.server+"/auth/login",params,options)
   }
 
 

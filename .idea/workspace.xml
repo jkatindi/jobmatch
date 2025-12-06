@@ -5,12 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="989493af-df23-4d38-8185-40401ca09f96" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/job-frontend/nginx.conf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/job-frontend/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/job-frontend/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/job-frontend/entrypoint.sh" beforeDir="false" afterPath="$PROJECT_DIR$/job-frontend/entrypoint.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/job-frontend/nginx.conf.template" beforeDir="false" afterPath="$PROJECT_DIR$/job-frontend/nginx.conf.template" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/job-backend/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/job-backend/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/job-backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/job-backend/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/job-backend/src/main/java/com/kat/os/security/SecureConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/job-backend/src/main/java/com/kat/os/security/SecureConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/job-backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/job-backend/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,6 +20,10 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -43,7 +47,8 @@
     &quot;eu.ydp.idea.ts.spec.generator.settings.spec.template&quot;: &quot;import {$ClassName$} from '$TestsRelativePath$../src/$classRelativePath$/$ClassName$';\n\ndescribe('$ClassName$', () =&gt; {\n  let $ObjName$:$ClassName$;\n\n  beforeEach(() =&gt; {\n    $ObjName$ = new $ClassName$();\n  });\n\n  describe('', () =&gt; {\n    it('', () =&gt; {\n      // given\n\n      // when\n\n      // then\n    });\n  });\n});\n&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/application/jobmatch&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/atosh/WebstormProjects/jobmatch&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -58,7 +63,7 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.backend">
     <configuration name="backend" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="$USER_HOME$/Program Files/Java/jdk-17.0.2" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -76,6 +81,7 @@
         <option name="myRunnerSettings" />
         <option name="myRunnerParameters">
           <MavenRunnerParameters>
+            <option name="cmdOptions" />
             <option name="profiles">
               <set />
             </option>
@@ -84,9 +90,13 @@
                 <option value="install" />
               </list>
             </option>
+            <option name="multimoduleDir" />
             <option name="pomFileName" />
             <option name="profilesMap">
               <map />
+            </option>
+            <option name="projectsCmdOptionValues">
+              <list />
             </option>
             <option name="resolveToWorkspace" value="false" />
             <option name="workingDirPath" value="$PROJECT_DIR$/job-backend" />
@@ -99,7 +109,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-a71380e98a7c-JavaScript-WS-252.28238.10" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.28238.7" />
+        <option value="bundled-js-predefined-d6986cc7102b-a71380e98a7c-JavaScript-IU-252.28238.7" />
       </set>
     </attachedChunks>
   </component>
@@ -113,7 +124,18 @@
       <updated>1763212826405</updated>
       <workItem from="1763489699975" duration="1093000" />
       <workItem from="1763914335881" duration="3014000" />
-      <workItem from="1763995500596" duration="3771000" />
+      <workItem from="1763995500596" duration="10208000" />
+      <workItem from="1764023454541" duration="5915000" />
+      <workItem from="1764068774025" duration="7716000" />
+      <workItem from="1764080995347" duration="2609000" />
+      <workItem from="1764087460267" duration="1197000" />
+      <workItem from="1764099714104" duration="719000" />
+      <workItem from="1764110563340" duration="9072000" />
+      <workItem from="1764191850782" duration="9621000" />
+      <workItem from="1764240032924" duration="7390000" />
+      <workItem from="1764257982926" duration="2099000" />
+      <workItem from="1764266967157" duration="13619000" />
+      <workItem from="1764292166902" duration="3258000" />
     </task>
     <servers />
   </component>

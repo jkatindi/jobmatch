@@ -15,7 +15,8 @@ services:
     build:
       context: ./job-backend
       dockerfile: Dockerfile
-    ports: 
+    restart: always
+    ports:
       - "8084:8084"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db_offer:3306/db_offer
@@ -32,11 +33,10 @@ services:
     restart: always
     ports:
       - "4200:80"
-    environment:
-      # Resolve the backend via Docker DNS by default; override with 192.168.0.45 when deploying to VirtualBox host
-      REMOTE_HOST: job-backend
     depends_on:
       - job-backend
+    environment:
+      REMOTE_HOST: job-backend:8084
     networks:
       - app-network
 volumes:
