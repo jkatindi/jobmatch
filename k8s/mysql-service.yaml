@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: db-service
+  namespace: jobmatch
+
   labels:
     app: db-offer
 spec:
