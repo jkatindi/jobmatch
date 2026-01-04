@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: job-frontend-config
+  namespace: jobmatch
+data:
+  REMOTE_HOST: http://job-backend:8084

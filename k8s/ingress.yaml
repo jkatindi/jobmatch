@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jobmatch-ingress
+  namespace: jobmatch
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: jobmatch.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: job-frontend
+                port:
+                  number: 80
+  # tls:
+  #   - hosts:
+  #       - jobmatch.example.com
+  #     secretName: jobmatch-tls

@@ -36,7 +36,7 @@ services:
     depends_on:
       - job-backend
     environment:
-      REMOTE_HOST: job-backend:8084
+      REMOTE_HOST: http://job-backend:8084
     networks:
       - app-network
 volumes:
