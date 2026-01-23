@@ -32,5 +32,5 @@ fi
  fi
  
  echo " [6] : install  kubelet / kubeadm / kubectl / kubernetes-cni "
- apt-get  snap install  -y -qq  kubelet kubeadm kubectl kubernetes-cni >/dev/null
+ apt-get  snap install  -y -qq  kubelet kubeadm kubectl kubernetes-cni --classic >/dev/null
  echo "END -Install  common  -" 
