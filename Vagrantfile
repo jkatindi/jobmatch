@@ -14,40 +14,42 @@ Vagrant.configure("2") do |config|
   # Kubernetes master node
   config.vm.define "node-master" do |node|
     node.vm.hostname = "node-master"
-    node.vm.network "private_network", ip: "192.168.0.45"
+    node.vm.network "private_network", ip: "192.168.10.1"
     node.vm.provider "virtualbox" do |vb|
       vb.name = "node-master"
     end
     # Install K8s dependencies/tools
     node.vm.provision "shell", path: "install-dependencies.sh"
     # Clone repo and (if cluster initialized) apply manifests
-    node.vm.provision "shell", path: "scripts/master-bootstrap.sh"
-  end
-
-  # Kubernetes worker node 1
-  config.vm.define "node-worker1" do |node|
-    node.vm.hostname = "node-worker1"
-    node.vm.network "private_network", ip: "192.168.0.37"
-    node.vm.provider "virtualbox" do |vb|
-      vb.name = "node-worker1"
-    end
-    node.vm.provision "shell", path: "install-dependencies.sh"
-  end
-
-  # Kubernetes worker node 2
-  config.vm.define "node-worker2" do |node|
-    node.vm.hostname = "node-worker2"
-    node.vm.network "private_network", ip: "192.168.0.40"
-    node.vm.provider "virtualbox" do |vb|
-      vb.name = "node-worker2"
-    end
-    node.vm.provision "shell", path: "install-dependencies.sh"
-  end
-
-  config.vm.provision "shell", inline: <<-SHELL
+    node.vm.provision "shell", path: "scripts/common-install.sh"
+    config.vm.provision "shell", inline: <<-SHELL
     sed -i 's/ChallengeResponseAuthentification no/ChallengeResponseAuthentification yes/g' /etc/ssh/sshd_config
     service ssh restart
   SHELL
+  end
+
+  # Kubernetes workers nodes 
+  numberServ=3
+  (1..numberServ).each do |i|
+     # Kubernetes worker node 2
+  config.vm.define "node-worker#{i}" do |node|
+    node.vm.hostname = "node-worker#{i}"
+    node.vm.network "private_network", ip: "192.168.10.1#{i}"
+    node.vm.provider "virtualbox" do |vb|
+      vb.name = "node-worker#{i}"
+    end
+    node.vm.provision "shell", path: "scripts/common-install.sh"
+    config.vm.provision "shell", inline: <<-SHELL
+    sed -i 's/ChallengeResponseAuthentification no/ChallengeResponseAuthentification yes/g' /etc/ssh/sshd_config
+    service ssh restart
+  SHELL
+  end
+    
+  end
+  
+end
+  
+  
 
   # Notes:
   # - The specified private IPs are configured on a host-only network managed by VirtualBox.
@@ -55,4 +57,4 @@ Vagrant.configure("2") do |config|
   #   on 192.168.0.0/24 due to conflicts, consider adjusting your host networking or VirtualBox settings.
   # - After machines are up, initialize the control plane on node-master with kubeadm,
   #   then join workers. Re-run master bootstrap to apply manifests if needed.
-end
+
