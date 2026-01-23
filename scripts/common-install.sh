@@ -33,4 +33,4 @@ fi
  
  echo " [6] : install  kubelet / kubeadm / kubectl / kubernetes-cni "
  apt-get install  -y -qq  kubelet kubeadm kubectl kubernetes-cni >/dev/null
- echo "END -Install  common  - " $IP 
+ echo "END -Install  common  -" 

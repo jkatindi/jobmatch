@@ -1,9 +1,11 @@
 Vagrant.configure("2") do |config|
   # Base box for all nodes
-  config.vm.box = "ubuntu/jammy64"
+  #config.vm.box = "ubuntu/jammy64"
 
   # Disable default synced folder for performance and to keep repo clean inside VMs
-  config.vm.synced_folder ".", "/vagrant", disabled: true
+  #config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  config.vm.box = "debian/stretch64"
 
   # Default provider settings for all machines
   config.vm.provider "virtualbox" do |vb|
@@ -24,12 +26,12 @@ Vagrant.configure("2") do |config|
     sed -i 's/ChallengeResponseAuthentification no/ChallengeResponseAuthentification yes/g' /etc/ssh/sshd_config
     service ssh restart
     SHELL
-     node.vm.provision "shell", path: "scripts/common-install.sh"
+    config.vm.provision "shell", path: "scripts/common-install.sh"
    
   end
 
   # Kubernetes workers nodes 
-  numberServ=3
+  numberServ=2
   (1..numberServ).each do |i|
      # Kubernetes worker node 2
   config.vm.define "node-worker#{i}" do |node|
@@ -42,7 +44,8 @@ Vagrant.configure("2") do |config|
     sed -i 's/ChallengeResponseAuthentification no/ChallengeResponseAuthentification yes/g' /etc/ssh/sshd_config
     service ssh restart
     SHELL
-     node.vm.provision "shell", path: "scripts/common-install.sh"
+    config.vm.provision "shell", path: "scripts/common-install.sh"
+
   end
     
   end
