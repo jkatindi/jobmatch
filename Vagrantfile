@@ -44,6 +44,11 @@ Vagrant.configure("2") do |config|
     node.vm.provision "shell", path: "install-dependencies.sh"
   end
 
+  config.vm.provision "shell", inline: <<-SHELL
+    sed -i 's/ChallengeResponseAuthentification no/ChallengeResponseAuthentification yes/g' /etc/ssh/sshd_config
+    service ssh restart
+  SHELL
+
   # Notes:
   # - The specified private IPs are configured on a host-only network managed by VirtualBox.
   #   Ensure they do not conflict with your LAN. If VirtualBox cannot create a host-only adapter
