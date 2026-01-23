@@ -1,11 +1,11 @@
 Vagrant.configure("2") do |config|
   # Base box for all nodes
-  #config.vm.box = "ubuntu/jammy64"
+  config.vm.box = "ubuntu/jammy64"
 
   # Disable default synced folder for performance and to keep repo clean inside VMs
   #config.vm.synced_folder ".", "/vagrant", disabled: true
 
-  config.vm.box = "debian/stretch64"
+  #config.vm.box = "debian/stretch64"
 
   # Default provider settings for all machines
   config.vm.provider "virtualbox" do |vb|
