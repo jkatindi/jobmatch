@@ -1,6 +1,7 @@
 Vagrant.configure("2") do |config|
   # Base box for all nodes
-  config.vm.box = "ubuntu/jammy64"
+   config.vm.box = "ubuntu/jammy64"
+   config.vm.box_version = "20241002.0.0"
 
   # Disable default synced folder for performance and to keep repo clean inside VMs
   #config.vm.synced_folder ".", "/vagrant", disabled: true
