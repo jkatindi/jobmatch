@@ -19,13 +19,13 @@ Vagrant.configure("2") do |config|
       vb.name = "node-master"
     end
     # Install K8s dependencies/tools
-    node.vm.provision "shell", path: "install-dependencies.sh"
     # Clone repo and (if cluster initialized) apply manifests
-    node.vm.provision "shell", path: "scripts/common-install.sh"
     config.vm.provision "shell", inline: <<-SHELL
     sed -i 's/ChallengeResponseAuthentification no/ChallengeResponseAuthentification yes/g' /etc/ssh/sshd_config
     service ssh restart
-  SHELL
+    SHELL
+     node.vm.provision "shell", path: "scripts/common-install.sh"
+   
   end
 
   # Kubernetes workers nodes 
@@ -38,11 +38,11 @@ Vagrant.configure("2") do |config|
     node.vm.provider "virtualbox" do |vb|
       vb.name = "node-worker#{i}"
     end
-    node.vm.provision "shell", path: "scripts/common-install.sh"
     config.vm.provision "shell", inline: <<-SHELL
     sed -i 's/ChallengeResponseAuthentification no/ChallengeResponseAuthentification yes/g' /etc/ssh/sshd_config
     service ssh restart
-  SHELL
+    SHELL
+     node.vm.provision "shell", path: "scripts/common-install.sh"
   end
     
   end
