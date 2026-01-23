@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
   # Kubernetes master node
   config.vm.define "node-master" do |node|
     node.vm.hostname = "node-master"
-    node.vm.network "private_network", ip: "192.168.10.1"
+    node.vm.network "private_network", ip: "192.168.10.2"
     node.vm.provider "virtualbox" do |vb|
       vb.name = "node-master"
     end
