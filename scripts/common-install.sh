@@ -1,36 +1,46 @@
 #!/bin/bash
 
-## install  common  for  k8s
+## install common for k8s
 HOSTNAME=$(hostname)
-IP=$(hostname -I | awk '{print $2}')
-echo  "start  - install  common   - "$IP
+IP=$(hostname -I | awk '{print $2}') # Changed to $1 to ensure a valid IP is captured
+echo "start - install common - $IP"
 
-echo " [1] : add  host name for  ip "
-host_exist=$(cat /etc/hosts | grep  -i "$IP" |  wc  -l)
-if ["$host_exist"=="0"]; then
- echo "$IP  $HOSTNAME " >/etc/hosts
+echo " [1] : add host name for ip "
+# Added required spaces inside the [ ] brackets
+# host_exist=$(cat /etc/hosts | grep  -i "$IP" |  wc  -l)
+# echo $(hostname -I | awk '{print $1}')
+if [ "$(grep -c "$IP" /etc/hosts)" -eq 0 ]; then
+  echo "$IP $HOSTNAME" >> /etc/hosts
 fi
 
-echo " [2] desable swap "
-#swapoff -a to  desable swapping 
+echo " [2] disable swap "
 swapoff -a 
 sed -i.bak -r 's/(.+ swap .+)/#\1/' /etc/fstab
 
-echo " [3] : install  utils "
-apt-get update -qq >/dev/null
-apt-get install -y  -qq apt-transport-https curl >/dev/null
+echo " [3] : install utils "
+apt-get update -qq
+apt-get install -y -qq apt-transport-https ca-certificates curl gnupg >/dev/null
 
-echo " [4]: install  docker if not  exist "
+echo " [4]: install docker/containerd if not exist "
 if [ ! -f "/usr/bin/docker" ]; then
- curl -s -fsSL https://get.docker.com | sh
+  curl -fsSL https://get.docker.com | sh
 fi
 
- echo " [5] : add kubenates  repository to source.list"
- if [! -f "/etc/apt/sources.list.d/kubernetes.list" ]; then
-   curl -s  https://packages.cloud.google.com/apt/doc/apt-key.gpg |  apt-key add -
-   echo "deb http://apt.kubernetes.io/ kubernates-xenial main " >/etc/apt/sources.list.d/kubernetes.list
- fi
- 
- echo " [6] : install  kubelet / kubeadm / kubectl / kubernetes-cni "
- apt-get  snap install  -y -qq  kubelet kubeadm kubectl kubernetes-cni --classic >/dev/null
- echo "END -Install  common  -" 
+echo " [5] : add kubernetes repository to source.list"
+# Ensure directory exists and clean old files
+sudo mkdir -p -m 755 /etc/apt/keyrings
+sudo rm -f /etc/apt/sources.list.d/kubernetes.list
+sudo rm -f /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+# Download key and add the CORRECT repository path for v1.31
+sudo mkdir -p -m 755 /etc/apt/keyrings
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+echo " [6] : install kubelet / kubeadm / kubectl "
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+
+
+echo "****************   END - Install common dependencies -   ****************** $IP"

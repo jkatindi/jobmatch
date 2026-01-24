@@ -32,7 +32,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Kubernetes workers nodes 
-  numberServ=2
+  numberServ=3
   (1..numberServ).each do |i|
      # Kubernetes worker node 2
   config.vm.define "node-worker#{i}" do |node|
