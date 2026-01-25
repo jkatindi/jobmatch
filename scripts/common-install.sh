@@ -14,7 +14,7 @@ if [ "$(grep -c "$IP" /etc/hosts)" -eq 0 ]; then
 fi
 
 echo " [2] disable swap "
-swapoff -a 
+swapoff -a
 sed -i.bak -r 's/(.+ swap .+)/#\1/' /etc/fstab
 
 echo " [3] : install utils "
@@ -39,7 +39,7 @@ echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.
 
 echo " [6] : install kubelet / kubeadm / kubectl "
 sudo apt-get update
-sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-get install -y kubelet kubeadm kubectl kubernetes-cni >/dev/null
 sudo apt-mark hold kubelet kubeadm kubectl
 
 
