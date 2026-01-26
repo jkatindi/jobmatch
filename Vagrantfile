@@ -28,7 +28,7 @@ Vagrant.configure("2") do |config|
     service ssh restart
     SHELL
     config.vm.provision "shell", path: "scripts/common-install.sh"
-   
+    config.vm.provision "shell", path: "scripts/cluster-install.sh"
   end
 
   # Kubernetes workers nodes 
@@ -45,8 +45,10 @@ Vagrant.configure("2") do |config|
     sed -i 's/ChallengeResponseAuthentification no/ChallengeResponseAuthentification yes/g' /etc/ssh/sshd_config
     service ssh restart
     SHELL
-    config.vm.provision "shell", path: "scripts/common-install.sh"
-
+    config.vm.provision "shell", inline: <<-SHELL
+      while [ ! -f /vagrant/join-command.sh ]; do sleep 5; done
+        sudo sh /vagrant/join-command.sh
+    SHELL
   end
     
   end
