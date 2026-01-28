@@ -45,10 +45,8 @@ Vagrant.configure("2") do |config|
     sed -i 's/ChallengeResponseAuthentification no/ChallengeResponseAuthentification yes/g' /etc/ssh/sshd_config
     service ssh restart
     SHELL
-    config.vm.provision "shell", inline: <<-SHELL
-      while [ ! -f /vagrant/join-command.sh ]; do sleep 5; done
-        sudo sh /vagrant/join-command.sh
-    SHELL
+
+    config.vm.provision "shell", path: "scripts/node-join.sh"
   end
     
   end
