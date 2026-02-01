@@ -59,3 +59,13 @@ sudo systemctl restart containerd
 sudo systemctl stop kubelet
 sudo ipvsadm --clear  # Si vous utilisiez IPVS
 sudo iptables -F && sudo iptables -t nat -F && sudo iptables -t mangle -F && sudo iptables -X
+
+
+
+
+
+
+
+
+
+config.vm.provision "shell", path: "scripts/common-install.sh"  will  install   kubernetes tools (kubectl,kubeadm,kubelet,kubernates-cni).  config.vm.provision "shell", path: "scripts/cluster-install.sh" create  a  cluster   kubernetes  using  kubeadm  and  configure  CRI           .                               config.vm.provision "shell", path: "scripts/node-join.sh"   allow  worker node  to  join  cluster.  master-node ip :192.168.10.1  ,worker-node ip :192.168.10.2                          All  these script  will  be used in  Vagrantfile

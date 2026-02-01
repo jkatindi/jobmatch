@@ -11,7 +11,7 @@ kubeadm reset -f
 
 # worker nodes join  cluster
 echo "join  this worker node $IP_ADR  to  cluster  lead  by => "$IP_MASTER
-kubeadm join --ignore-preflight-errors=all   --token=$TOKEN  $IP_MASTER:6443  
+kubeadm join --ignore-preflight-errors=all   --token=$TOKEN  $IP_MASTER:6443  --discovery-token-unsafe-skip-ca-verification
  
 echo "restart  end  enable kubelet "
 systemctl enable kubelet
