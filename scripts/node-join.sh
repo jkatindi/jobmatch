@@ -12,7 +12,9 @@ sudo mkdir -p /etc/containerd
 if [ ! -f /etc/containerd/config.toml ]; then
   containerd config default | sudo tee /etc/containerd/config.toml >/dev/null
 fi
-sudo sed -i 's/^\(\s*SystemdCgroup = \)false/\1true/' /etc/containerd/config.toml || true
+#sudo sed -i 's/^\(\s*SystemdCgroup = \)false/\1true/' /etc/containerd/config.toml || true
+sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/config.toml
+
 sudo systemctl enable --now containerd
 
 echo "[node-join] Reset any previous kubeadm state"

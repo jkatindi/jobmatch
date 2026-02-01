@@ -58,4 +58,3 @@ echo "[cluster-install] Control plane ready on ${MASTER_IP}"
 
 
 
-
