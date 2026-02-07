@@ -7,6 +7,9 @@ HOSTNAME=$(hostname)
 #POD_CIDR="10.244.0.0/16" # Flannel default
 POD_CIDR="192.168.0.0/16" # Calico
 MASTER_IP=$(hostname | awk '{print $2}')
+
+echo "before  installing cluster, reset  all  nodes and config  with  kubeadm reset -f"
+sudo kubeadm reset -f
 echo "[cluster-install] Master node hostname: $HOSTNAME, IP: $MASTER_IP"
 
 echo "[cluster-install] Configure containerd (SystemdCgroup=true)"
@@ -26,9 +29,9 @@ if [ -f  "/etc/kubernetes/admin.conf" ]; then
   echo "[cluster-install] Cluster appears initialized already. Skipping kubeadm init."
 else
   echo "[cluster-install] Initializing control plane with kubeadm..."
-  sudo kubeadm reset -f
   sudo kubeadm init --ignore-preflight-errors=all  --apiserver-advertise-address=$MASTER_IP  --pod-network-cidr=$POD_CIDR   
-  
+  # change  the  IP  that  vagrant  system  generate  when  the  cluster  is  created  to  the  actual  IP  of  the  master  node
+  find  /etc/kubernetes  -type f  -exec  sudo sed -i "s/10.0.2.15/$MASTER_IP/g" {} +
 fi
 
 echo "[cluster-install] Setting kubeconfig for current user"
@@ -41,12 +44,11 @@ kubectl create -f https://docs.projectcalico.org/manifests/calico.yaml
 # creation join  file command  to  store in  /root/vagrant/
 sudo mkdir  -p  /root/vagrant
 sudo kubeadm token create --print-join-command |  tee /root/vagrant/join.sh
-sudo  sed -i  's/10.0.2.15/'"$MASTER_IP"'/g' /root/vagrant/join.sh   
 chmod +x /root/vagrant/join.sh
 cat  /root/vagrant/join.sh
 
 echo "[cluster-install] Restarting kubelet"
-sudo systemctl restart kubelet 
+sudo systemctl restart kubelet
 echo "[cluster-install] Control plane ready on " $MASTER_IP
 
 

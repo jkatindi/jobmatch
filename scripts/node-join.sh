@@ -14,7 +14,7 @@ while [ ! -f /root/vagrant/join.sh]; do
 sleep 5
 done
 chmod +x /root/vagrant/join.sh
-
+sh  /root/vagrant/join.sh
 echo "[node-join] Restarting kubelet"
 sudo systemctl restart kubelet 
 echo "[node-join] Done"
