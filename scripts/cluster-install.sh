@@ -10,6 +10,12 @@ MASTER_IP=$(hostname | awk '{print $2}')
 
 echo "before  installing cluster, reset  all  nodes and config  with  kubeadm reset -f"
 sudo kubeadm reset -f
+sudo rm -rf /etc/cni/net.d
+sudo rm -rf /var/lib/cni/
+sudo rm -rf /var/lib/kubelet/
+sudo rm -rf ~/.kube/config
+sudo iptables -F && sudo iptables -t nat -F && sudo iptables -t mangle -F && sudo iptables -X
+
 echo "[cluster-install] Master node hostname: $HOSTNAME, IP: $MASTER_IP"
 
 echo "[cluster-install] Configure containerd (SystemdCgroup=true)"
@@ -31,16 +37,22 @@ else
   echo "[cluster-install] Initializing control plane with kubeadm..."
   sudo kubeadm init --ignore-preflight-errors=all  --apiserver-advertise-address=$MASTER_IP  --pod-network-cidr=$POD_CIDR   
   # change  the  IP  that  vagrant  system  generate  when  the  cluster  is  created  to  the  actual  IP  of  the  master  node
-  find  /etc/kubernetes  -type f  -exec  sudo sed -i "s/10.0.2.15/$MASTER_IP/g" {} +
+
 fi
+#sudo kubeadm init phase certs apiserver --apiserver-advertise-address 192.168.10.2
+#find  /etc/kubernetes  -type f  -exec  sudo sed -i 's/10.0.2.15/192.168.10.2/g' {} +
+echo "[cluster-install] Installing Calico CNI"
+kubectl create -f https://docs.projectcalico.org/manifests/calico.yaml
 
 echo "[cluster-install] Setting kubeconfig for current user"
 sudo mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-echo "[cluster-install] Installing Calico CNI"
-kubectl create -f https://docs.projectcalico.org/manifests/calico.yaml
+
+sudo systemctl restart kubelet
+
+
 # creation join  file command  to  store in  /root/vagrant/
 sudo mkdir  -p  /root/vagrant
 sudo kubeadm token create --print-join-command |  tee /root/vagrant/join.sh
@@ -50,7 +62,6 @@ cat  /root/vagrant/join.sh
 echo "[cluster-install] Restarting kubelet"
 sudo systemctl restart kubelet
 echo "[cluster-install] Control plane ready on " $MASTER_IP
-
 
 
 
