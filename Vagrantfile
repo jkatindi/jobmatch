@@ -9,15 +9,15 @@ Vagrant.configure("2") do |config|
   #config.vm.box = "debian/stretch64"
 
   # Default provider settings for all machines
+  #config.vm.network "public_network", use_dhcp_assigned_default_route: true
   config.vm.provider "virtualbox" do |vb|
     vb.memory = 2048
     vb.cpus = 2
   end
-
   # Kubernetes master node
   config.vm.define "node-master" do |node|
     node.vm.hostname = "node-master"
-    node.vm.network "private_network", ip: "10.0.2.15"
+    node.vm.network "private_network", ip: "192.168.10.100"
     node.vm.provider "virtualbox" do |vb|
       vb.name = "node-master"
     end
@@ -37,7 +37,7 @@ Vagrant.configure("2") do |config|
      # Kubernetes worker node 2
   config.vm.define "node-worker#{i}" do |node|
     node.vm.hostname = "node-worker#{i}"
-    node.vm.network "private_network", ip: "192.168.10.1#{i}"
+    node.vm.network "private_network", ip: "192.168.10.10#{i}"
     node.vm.provider "virtualbox" do |vb|
       vb.name = "node-worker#{i}"
     end
@@ -46,6 +46,7 @@ Vagrant.configure("2") do |config|
     service ssh restart
     SHELL
 
+    config.vm.provision "shell", path: "scripts/common-install.sh"
     config.vm.provision "shell", path: "scripts/node-join.sh"
   end
     

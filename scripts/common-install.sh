@@ -25,7 +25,7 @@ echo " [4]: install docker/containerd if not exist "
 if [ ! -f "/usr/bin/docker" ]; then
   curl -fsSL https://get.docker.com | sh
 fi
-
+usermod -aG docker vagrant
 echo " [5] : add kubernetes repository to source.list"
 # Ensure directory exists and clean old files
 sudo mkdir -p -m 755 /etc/apt/keyrings
@@ -40,5 +40,7 @@ echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.
 echo " [6] : install kubelet / kubeadm / kubectl "
 sudo apt-get update
 sudo apt-get install -y kubelet kubeadm kubectl 
+sudo echo "KUBELET_EXTRA_ARGS=--node-ip=$IP" > /etc/default/kubelet
+systemctl restart kubelet
 sudo apt-mark hold kubelet kubeadm kubectl
 echo "****************   END - Install common dependencies -   ****************** $IP"

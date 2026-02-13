@@ -1,20 +1,12 @@
 #!/bin/bash
-
 set -euo pipefail
 
-HOSTNAME=$(hostname)
-MASTER_IP="192.168.10.2"
-#TOKEN="m3v8j9.q1w2e3r4t5y6u7i8"
-echo "[node-join] Worker hostname: $HOSTNAME"
+echo "[worker-setup] Installation de sshpass..."
+sudo apt-get update && sudo apt-get install -y sshpass
 
-sudo systemctl enable kubelet
+echo "[worker-setup] Récupération de la commande join..."
+# On télécharge dans /tmp pour éviter les problèmes de permissions
+sshpass -p "vagrant" scp -o StrictHostKeyChecking=no vagrant@192.168.10.100:/etc/kubeadm_join_cmd.sh /tmp/kubeadm_join_cmd.sh
 
-#kubeadm  join --ignore-preflight-errors=all  --token="$TOKEN"  $MASTER_IP:6443 --discovery-token-unsafe-skip-ca-verification
-while [ ! -f /root/vagrant/join.sh]; do
-sleep 5
-done
-chmod +x /root/vagrant/join.sh
-sh  /root/vagrant/join.sh
-echo "[node-join] Restarting kubelet"
-sudo systemctl restart kubelet 
-echo "[node-join] Done"
+echo "[worker-setup] Exécution du join..."
+sudo sh /tmp/kubeadm_join_cmd.sh
