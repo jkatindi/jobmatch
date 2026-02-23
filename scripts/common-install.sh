@@ -25,7 +25,9 @@ echo " [4]: install docker/containerd if not exist "
 if [ ! -f "/usr/bin/docker" ]; then
   curl -fsSL https://get.docker.com | sh
 fi
-usermod -aG docker vagrant
+#usermod -aG docker vagrant
+#echo "vagrant:vagrant" | sudo chpasswd
+
 echo " [5] : add kubernetes repository to source.list"
 # Ensure directory exists and clean old files
 sudo mkdir -p -m 755 /etc/apt/keyrings

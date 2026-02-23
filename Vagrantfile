@@ -4,7 +4,7 @@ Vagrant.configure("2") do |config|
    config.vm.box_version = "20241002.0.0"
 
   # Disable default synced folder for performance and to keep repo clean inside VMs
-  #config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.vm.synced_folder ".", "/vagrant", disabled: true
 
   #config.vm.box = "debian/stretch64"
 
