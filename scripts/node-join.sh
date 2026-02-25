@@ -1,6 +1,6 @@
 #!/bin/bash
 set -euo pipefail
-
+ apt-get install -y sshpass
 MASTER_IP=192.168.10.100
 HOST_IP=$(hostname -I | awk '{print $2}')
 HOSTNAME=$(hostname)
