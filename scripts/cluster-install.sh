@@ -9,11 +9,7 @@ HOSTNAME=$(hostname)
 POD_CIDR="192.168.0.0/16" # Calico
 
 # Detect primary IPv4 address more reliably, fallback to hostname -I
-MASTER_IP=$(ip -4 route get 1.1.1.1 2>/dev/null | awk '{for(i=1;i<=NF;i++) if($i=="src"){print $(i+1); exit}}')
-if [ -z "${MASTER_IP:-}" ]; then
-  MASTER_IP=$(hostname -I | awk '{print $1}')
-fi
-
+MASTER_IP=$(hostname -I | awk '{print $2}' || true)
 echo "before installing cluster, reset all nodes and config with kubeadm reset -f"
 echo "[cluster-install] Master node hostname: $HOSTNAME, IP: $MASTER_IP"
 sudo kubeadm reset -f || true
@@ -49,6 +45,15 @@ if id -u vagrant >/dev/null 2>&1; then
 else
   JOIN_DIR="$USER_HOME/configs"
 fi
+# autoriser  l'acces distant  ssh 
+#autoriser  le  port  22  pour  les  connexions  ssh
+sudo ufw allow 22/tcp || true
+#autoriser  le  port  6443  pour  les  connexions  au  serveur  API  Kubernetes
+sudo ufw allow 6443/tcp || true
+# required  for setting up passwordless ssh between master and worker nodes, so that worker nodes can run the join command without manual intervention
+sudo  sed -i 's/.*PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config || true
+sudo systemctl restart sshd || true
+
 sudo mkdir -p "$JOIN_DIR"
 sudo kubeadm token create --print-join-command > "$JOIN_DIR/kubeadm_join_cmd.sh"
 sudo chmod +x "$JOIN_DIR/kubeadm_join_cmd.sh"
@@ -56,6 +61,10 @@ sudo chown -R ${SUDO_USER:-$USER}:${SUDO_USER:-$USER} "$JOIN_DIR" || true
 
 if id -u vagrant >/dev/null 2>&1; then
   echo "vagrant:vagrant" | sudo chpasswd || true
+fi
+# generate ssh keys Ed25519 for passwordless ssh between master and worker nodes
+if [ ! -f /home/vagrant/.ssh/id_ed25519 ]; then
+  sudo -u vagrant ssh-keygen -t ed25519 -f /home/vagrant/.ssh/id_ed25519 -N "" || true
 fi
 
 echo "[cluster-install] Control plane ready on $MASTER_IP"
