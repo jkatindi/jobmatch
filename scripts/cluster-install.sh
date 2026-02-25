@@ -51,7 +51,8 @@ sudo ufw allow 22/tcp || true
 #autoriser  le  port  6443  pour  les  connexions  au  serveur  API  Kubernetes
 sudo ufw allow 6443/tcp || true
 # required  for setting up passwordless ssh between master and worker nodes, so that worker nodes can run the join command without manual intervention
-sudo  sed -i 's/.*PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config || true
+sudo sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+sudo sed -i 's/^#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
 sudo systemctl restart sshd || true
 
 sudo mkdir -p "$JOIN_DIR"
@@ -63,8 +64,8 @@ if id -u vagrant >/dev/null 2>&1; then
   echo "vagrant:vagrant" | sudo chpasswd || true
 fi
 # generate ssh keys Ed25519 for passwordless ssh between master and worker nodes
-if [ ! -f /home/vagrant/.ssh/id_ed25519 ]; then
-  sudo -u vagrant ssh-keygen -t ed25519 -f /home/vagrant/.ssh/id_ed25519 -N "" || true
+if [ ! -f "$USER_HOME/.ssh/id_ed25519" ]; then
+  sudo -u ${SUDO_USER:-$USER} ssh-keygen -t ed25519 -N "" -f "$USER_HOME/.ssh/id_ed25519" || true
 fi
 
 echo "[cluster-install] Control plane ready on $MASTER_IP"

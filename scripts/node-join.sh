@@ -23,24 +23,22 @@ sudo mkdir -p /home/scripts
 
 # Prefer scp with sshpass if available, otherwise try scp with keyless or manual copy.
 # generate the  ssh key Ed25519 for the vagrant user if it does not exist, to allow passwordless scp in future runs	
-
-JOIN_SRC="/home/vagrant/configs/kubeadm_join_cmd.sh"
-if command -v sshpass >/dev/null 2>&1; then
-	sshpass -p 'vagrant' scp -o StrictHostKeyChecking=no -o PubkeyAuthentication=no  vagrant@${MASTER_IP}:${JOIN_SRC} /home/scripts/
-else
-	# Try scp without password (assumes shared filesystem or keys), fall back to curl from master if HTTP served
-	sudo scp -o StrictHostKeyChecking=no vagrant@${MASTER_IP}:${JOIN_SRC} /home/scripts/ || true
+# generate the  ssh key Ed25519 for the vagrant user if it does not exist, to allow passwordless scp in future runs
+# Générer la clé du worker
+if [ ! -f /home/vagrant/.ssh/id_ed25519 ]; then
+    sudo -u vagrant ssh-keygen -t ed25519 -f /home/vagrant/.ssh/id_ed25519 -N "" -q
 fi
+sudo -u vagrant sshpass -p 'vagrant' ssh-copy-id -o StrictHostKeyChecking=no vagrant@${MASTER_IP}
+JOIN_SRC="/home/vagrant/configs/kubeadm_join_cmd.sh"
+sshpass -p 'vagrant' scp -o StrictHostKeyChecking=no -o  vagrant@${MASTER_IP}:${JOIN_SRC} /home/scripts/
+sudo -u vagrant scp vagrant@${MASTER_IP}:${JOIN_SRC} /home/scripts
 
 if [ ! -f /home/scripts/kubeadm_join_cmd.sh ]; then
 	echo "Could not fetch join command from ${MASTER_IP}:${JOIN_SRC}."
 	echo "Please copy the file /home/vagrant/configs/kubeadm_join_cmd.sh from the master to /home/scripts on this node and re-run."
 	exit 1
 fi
-# generate the  ssh key Ed25519 for the vagrant user if it does not exist, to allow passwordless scp in future runs
-if [ ! -f /home/vagrant/.ssh/id_ed25519 ]; then
-	sudo -u vagrant ssh-keygen -t ed25519 -f /home/vagrant/.ssh/id_ed25519 -N "" -q	
-fi
+
 
 echo "[worker-setup] Executing join command..."
 sudo sh /home/scripts/kubeadm_join_cmd.sh --v=5
