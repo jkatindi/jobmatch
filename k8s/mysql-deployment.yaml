@@ -3,8 +3,6 @@ kind: Deployment
 metadata:
   name: db-offer
   namespace: jobmatch
-  labels:
-    app: db-offer
 spec:
   replicas: 1
   selector:
@@ -16,7 +14,7 @@ spec:
         app: db-offer
     spec:
       containers:
-        - name: mysql-container
+        - name: db-container
           image: mysql:8
           imagePullPolicy: IfNotPresent
           ports:

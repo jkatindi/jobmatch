@@ -3,8 +3,6 @@ kind: Deployment
 metadata:
   name: job-backend
   namespace: jobmatch
-  labels:
-    app: job-backend
 spec:
   replicas: 1
   selector:
@@ -16,7 +14,7 @@ spec:
         app: job-backend
     spec:
       containers:
-        - name: job-backend
+        - name: job-container
           image: job-backend:v1
           imagePullPolicy: IfNotPresent
           ports:

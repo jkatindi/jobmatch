@@ -1,65 +1,47 @@
 Vagrant.configure("2") do |config|
-  # Base box for all nodes
-   config.vm.box = "ubuntu/jammy64"
-   config.vm.box_version = "20241002.0.0"
-
-  # Disable default synced folder for performance and to keep repo clean inside VMs
-  config.vm.synced_folder ".", "/vagrant", disabled: true
-
-  #config.vm.box = "debian/stretch64"
-
-  # Default provider settings for all machines
-  #config.vm.network "public_network", use_dhcp_assigned_default_route: true
+  config.vm.box = "ubuntu/jammy64"
+  config.vm.box_version = "20241002.0.0"
+  config.vm.synced_folder ".", "/vagrant", disabled: false
+  
   config.vm.provider "virtualbox" do |vb|
     vb.memory = 2048
     vb.cpus = 2
   end
+
   # Kubernetes master node
   config.vm.define "node-master" do |node|
     node.vm.hostname = "node-master"
-    node.vm.network "private_network", ip: "192.168.10.100"
+    node.vm.network "private_network", ip: "192.168.10.40"
     node.vm.provider "virtualbox" do |vb|
       vb.name = "node-master"
     end
-    # Install K8s dependencies/tools
-    # Clone repo and (if cluster initialized) apply manifests
-    config.vm.provision "shell", inline: <<-SHELL
-    sed -i 's/ChallengeResponseAuthentification no/ChallengeResponseAuthentification yes/g' /etc/ssh/sshd_config
-    service ssh restart
+    # Activer l'authentification par mot de passe pour sshpass
+    node.vm.provision "shell", inline: <<-SHELL
+      sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+      systemctl restart sshd
     SHELL
-    config.vm.provision "shell", path: "scripts/common-install.sh"
-    config.vm.provision "shell", path: "scripts/cluster-install.sh"
+    node.vm.provision "shell", path: "scripts/common-install.sh"
+    node.vm.provision "shell", path: "scripts/cluster-install.sh"
   end
 
   # Kubernetes workers nodes 
-  numberServ=2
+  numberServ = 1
   (1..numberServ).each do |i|
-     # Kubernetes worker node 2
-  config.vm.define "node-worker#{i}" do |node|
-    node.vm.hostname = "node-worker#{i}"
-    node.vm.network "private_network", ip: "192.168.10.10#{i}"
-    node.vm.provider "virtualbox" do |vb|
-      vb.name = "node-worker#{i}"
+    config.vm.define "node-worker#{i}" do |node|
+      node.vm.hostname = "node-worker#{i}"
+      node.vm.network "private_network", ip: "192.168.10.4#{i}"
+      node.vm.provider "virtualbox" do |vb|
+        vb.name = "node-worker#{i}"
+      end
+      # Activer l'authentification par mot de passe pour sshpass
+      node.vm.provision "shell", inline: <<-SHELL
+        sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+        systemctl restart sshd
+        apt-get update && apt-get install -y sshpass
+      SHELL
+      node.vm.provision "shell", path: "scripts/common-install.sh"
+      # EXECUTION EN TANT QU'UTILISATEUR VAGRANT (privileged: false)
+      node.vm.provision "shell", path: "scripts/node-join.sh", privileged: false
     end
-    config.vm.provision "shell", inline: <<-SHELL
-    sed -i 's/ChallengeResponseAuthentification no/ChallengeResponseAuthentification yes/g' /etc/ssh/sshd_config
-    service ssh restart
-    SHELL
-
-    config.vm.provision "shell", path: "scripts/common-install.sh"
-    config.vm.provision "shell", path: "scripts/node-join.sh"
-  end
-    
-  end
-  
+  end 
 end
-  
-  
-
-  # Notes:
-  # - The specified private IPs are configured on a host-only network managed by VirtualBox.
-  #   Ensure they do not conflict with your LAN. If VirtualBox cannot create a host-only adapter
-  #   on 192.168.0.0/24 due to conflicts, consider adjusting your host networking or VirtualBox settings.
-  # - After machines are up, initialize the control plane on node-master with kubeadm,
-  #   then join workers. Re-run master bootstrap to apply manifests if needed.
-

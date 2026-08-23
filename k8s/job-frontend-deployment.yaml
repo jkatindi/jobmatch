@@ -3,8 +3,6 @@ kind: Deployment
 metadata:
   name: job-frontend
   namespace: jobmatch
-  labels:
-    app: job-frontend
 spec:
   replicas: 1
   selector:
@@ -16,7 +14,7 @@ spec:
         app: job-frontend
     spec:
       containers:
-        - name: job-frontend
+        - name: frontend-container
           image: job-frontend:v1
           imagePullPolicy: IfNotPresent
           ports:
