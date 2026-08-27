@@ -20,11 +20,19 @@ sed -i.bak -r 's/(.+ swap .+)/#\1/' /etc/fstab
 echo " [3] : install utils "
 apt-get update -qq
 apt-get install -y -qq apt-transport-https ca-certificates curl gnupg >/dev/null
+# ajouter le paquet conntrack 
+apt-get install -y -qq conntrack >/dev/null 
+
 
 echo " [4]: install docker/containerd if not exist "
-if [ ! -f "/usr/bin/docker" ]; then
-  curl -fsSL https://get.docker.com | sh
-fi
+sudo apt-get install -y -qq containerd >/dev/null
+sudo mkdir -p /etc/containerd
+sudo containerd config default | sudo tee /etc/containerd/config.toml >/dev/null
+sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/config.toml
+sudo systemctl restart containerd
+#if [ ! -f "/usr/bin/docker" ]; then
+ # curl -fsSL https://get.docker.com | sh
+#fi
 usermod -aG docker vagrant
 echo "vagrant:vagrant" | sudo chpasswd
 
