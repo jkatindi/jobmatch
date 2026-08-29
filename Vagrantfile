@@ -25,7 +25,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Kubernetes workers nodes 
-  numberServ = 1
+  numberServ = 3
   (1..numberServ).each do |i|
     config.vm.define "node-worker#{i}" do |node|
       node.vm.hostname = "node-worker#{i}"
@@ -44,4 +44,5 @@ Vagrant.configure("2") do |config|
       node.vm.provision "shell", path: "scripts/node-join.sh", privileged: false
     end
   end 
+  config.vm.provision "shell", path: "scripts/deploiment.sh", privileged: false
 end
