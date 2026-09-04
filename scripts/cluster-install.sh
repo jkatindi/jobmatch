@@ -4,22 +4,7 @@
 sudo sysctl --system
 sudo systemctl restart kubelet
 
-# configuration resau overlay
-cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
-overlay
-br_netfilter
-EOF
-sudo modprobe overlay
-sudo modprobe br_netfilter
 
-
-# configuration Sysctl requise
-cat <<EOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf
-net.bridge.bridge-nf-call-ip6tables = 1
-net.ipv4.ip_forward = 1
-net.bridge.bridge-nf-call-iptables = 1
-EOF
-sudo sysctl --system
 
 # Initialisation du Master
 sudo kubeadm init --apiserver-advertise-address=192.168.10.40  --pod-network-cidr=10.244.0.0/16

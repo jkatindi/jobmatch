@@ -31,15 +31,6 @@ sudo -u vagrant scp -o StrictHostKeyChecking=no vagrant@192.168.10.40:/home/vagr
 # changer le propriétaire du script de jointure pour l'utilisateur vagrant
 sudo chown vagrant:vagrant /home/vagrant/scripts/join_command.sh
 # changer les permissions pour que le script soit exécutable
-
-echo "activer le paquet  ip forwarding [4]"
-sudo sysctl -w net.ipv4.ip_forward=1
-sudo nano /etc/sysctl.conf
-# chercher la  ligne  net.ipv4.ip_forward=1 et décommenter la ligne en supprimant le # au début de la ligne
-sudo sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/' /etc/sysctl.conf
-sudo sysctl -p
-echo "Exécution du script de jointure sur le nœud [5]"
-
 sudo bash /home/vagrant/scripts/join_command.sh
 echo "Script de jointure terminé. Le nœud a été ajouté au cluster Kubernetes."
 
